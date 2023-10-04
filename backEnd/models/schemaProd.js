@@ -10,12 +10,4 @@ const prod = new mongoose.Schema({
     quantite:{type:Number,required:true}
 });
 
-const commande = new mongoose.Schema({
-    _id: ObjectId,
-    utilisateur: { type: String, required: true },
-    listeProduits: { type: [prod], required: true },
-    valide: { type: Boolean, required: true }, // Utilisez 'Number' au lieu de 'Integer'
-});
-
 module.exports = mongoose.model('produit',prod);
-//module.exports = mongoose.model('commande',commande);

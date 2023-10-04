@@ -16,7 +16,10 @@ app.get("/api", (req, res) => {
 app.use(bodyParser.json());
 
 
-app.use(require('./routes/routes'));
+app.use(require('./routes/routesProd'));
+app.use(require('./routes/routesCommande'));
+app.use(require('./routes/routesUtilisateur'));
+
 
 app.listen(3001, () => {
     console.log('Serveur en cours d\'exécution sur le port 3001');

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const productModel = require("../models/schemaProd.js");
+const productModel = require("../models/schemaProd");
 
 const storeProduct = (req, res) => {
     const {title, description, prix, quantite} = req.body;
