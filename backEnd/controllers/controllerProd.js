@@ -47,12 +47,15 @@ const getProd = (req, res, next) => {
     productModel
         .findById(req.params.id)
         .then((prod) => {
-            console.log('GET Retrieved ID: ' + prod._id);
-            res.format({
-                json: () => {
-                    res.json(prod);
-                }
-            });
+            if(prod.quantite>0)
+            {
+                console.log('GET Retrieved ID: ' + prod._id);
+                res.json(prod);
+            }else
+            {
+                res.json(" ah mince..");
+            }
+
         })
         .catch((error) => {
             // transmit the error to the next middleware
