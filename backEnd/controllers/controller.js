@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-
+const mongoose = require('mongoose');
 const productModel = require("../models/schema.js");
 const storeProduct = (req, res) => {
     const {title, description, prix, quantite} = req.body;
@@ -9,7 +8,6 @@ const storeProduct = (req, res) => {
         description: description,
         prix: prix,
         quantite: quantite,
-
 
     }).then(todo => {
         console.log('POST creating new product: ' + todo);
@@ -24,4 +22,11 @@ const storeProduct = (req, res) => {
         });
     }
 // we export a list of all our controllers
-module.exports = {storeProduct};
+
+const indexProduit = (req, res) => {
+    let value = [{title: "Produit 1", description: "Description produit 1", prix: 1.99, quantite: 1},
+        {title: "Produit 2", description: "Description produit 2", prix: 2.99, quantite: 1}]
+    res.json(value);
+}
+
+module.exports = {storeProduct, indexProduit};

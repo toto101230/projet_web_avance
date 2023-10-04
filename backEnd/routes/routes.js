@@ -4,7 +4,7 @@ const userController = require('../controllers/controller');
 const router = express.Router();
 
 router.route('/add')
-    //.get(userController.indexUser)
+    .get(userController.indexProduit)
     .post(userController.storeProduct);
 
 
