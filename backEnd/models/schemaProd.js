@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+const SchemaProd = mongoose.Schema;
+const ObjectId = SchemaProd.ObjectId;
 
 const prod = new mongoose.Schema({
     _id: ObjectId,
@@ -18,4 +18,4 @@ const commande = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('produit',prod);
-module.exports = mongoose.model('commande',commande);
+//module.exports = mongoose.model('commande',commande);

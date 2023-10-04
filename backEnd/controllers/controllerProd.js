@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const productModel = require("../models/schema.js");
+const productModel = require("../models/schemaProd.js");
 
 const storeProduct = (req, res) => {
     const {title, description, prix, quantite} = req.body;
@@ -34,14 +34,10 @@ const tout = (_req, res, next) => {
     productModel.find({})
         .then((produits) => {
             //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
-            res.format({
-                // JSON response will show all users in JSON format
-                json: () => {
+
                     res.json(produits);
-                }
-            });
-        })
-        .catch((error) => {
+
+        }).catch((error) => {
             // transmit the error to the next middleware
             return next(error);
         });
