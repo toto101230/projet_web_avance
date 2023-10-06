@@ -63,4 +63,15 @@ const getProd = (req, res, next) => {
         });
 };
 
-module.exports = {getProd,tout,storeProduct, indexProduit};
+const updateProd = (key, value) => {
+    // Get our request and form values.
+    //const id = req.params.id;
+    //const { quantite } = req.body;
+    quantite=value;
+    // find the document by ID
+    return productModel.findByIdAndUpdate(key, { quantite });
+
+};
+
+
+module.exports = {getProd,tout,storeProduct, indexProduit,updateProd};
