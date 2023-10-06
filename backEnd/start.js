@@ -8,12 +8,13 @@ const bodyParser = require('body-parser');
 // instruct express to use our routes middleware
 
 app.use(cors())
+app.use(bodyParser.json());
+
 
 app.get("/api", (req, res) => {
     res.json({message: "Hello from server!"});
 });
 
-app.use(bodyParser.json());
 
 
 app.use(require('./routes/routesProd'));

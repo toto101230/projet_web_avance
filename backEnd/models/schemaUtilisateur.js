@@ -11,7 +11,8 @@ const utilisateur = new mongoose.Schema({
     addressNumero: { type: Number, required: false },
     addressRue: { type: String, required: false },
     ville: { type: String, required: false }, // Utilisez 'Number' au lieu de 'Integer'
-    Codepostal:{type:Number,required:false}
+    Codepostal:{type:Number,required:false},
+    password: { type: String, required: true }
 });
 
 module.exports = mongoose.model('utilisateur',utilisateur);

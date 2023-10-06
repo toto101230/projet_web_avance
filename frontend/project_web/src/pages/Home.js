@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "./../logo.svg";
-import "./../App.css";
+import "../css/App.css";
 import {ipAPI} from "../config";
 
 function Home() {
@@ -16,7 +16,7 @@ function Home() {
         <div className="App">
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo"/>
-                <p>{!data ? "Loading..." : data}</p>
+                <p>{!data ? "Si vous voyez ce message, c'est que l'API ne fonctionne pas" : data}</p>
             </header>
         </div>
     );

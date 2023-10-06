@@ -1,8 +1,9 @@
 const express = require('express');
-const userController = require('../controllers/controllerCommande');
+const commandeController = require('../controllers/controllerCommande');
 
 const router = express.Router();
 
-router.route('/commander').post(userController.commander);
+router.route('/commander').post(commandeController.commander);
+router.route('/commandes').get(commandeController.getAllCommandes);
 
 module.exports = router;

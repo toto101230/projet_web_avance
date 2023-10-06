@@ -4,9 +4,10 @@ import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import Produits from "./pages/Produits";
 import Panier from "./pages/Panier";
-import Commande from "./pages/Commande";
 import Connexion from "./pages/Connexion";
 import Inscription from "./pages/Inscription";
+import Deconnexion from "./pages/Deconnexion";
+import Admin from "./pages/Admin";
 
 
 export default function App() {
@@ -17,9 +18,10 @@ export default function App() {
                     <Route path="" element={<Home/>}/>
                     <Route path="produits" element={<Produits/>}/>
                     <Route path="panier" element={<Panier/>}/>
-                    <Route path="commande" element={<Commande />}/>
                     <Route path="connexion" element={<Connexion/>}/>
                     <Route path="inscription" element={<Inscription/>}/>
+                    <Route path="deconnexion" element={<Deconnexion/>}/>
+                    <Route path="admin" element={<Admin/>}/>
                     <Route path="*" element={<NoPage/>}/>
                 </Route>
             </Routes>

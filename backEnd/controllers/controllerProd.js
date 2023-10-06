@@ -21,7 +21,7 @@ const storeProduct = (req, res) => {
         (error) => {
             return res.send("There was a problem " + error);
         });
-    }
+}
 // we export a list of all our controllers
 
 const indexProduit = (req, res) => {
@@ -35,24 +35,22 @@ const tout = (_req, res, next) => {
         .then((produits) => {
             //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
 
-                    res.json(produits);
+            res.json(produits);
 
         }).catch((error) => {
-            // transmit the error to the next middleware
-            return next(error);
-        });
+        // transmit the error to the next middleware
+        return next(error);
+    });
 };
 
 const getProd = (req, res, next) => {
     productModel
         .findById(req.params.id)
         .then((prod) => {
-            if(prod.quantite>0)
-            {
+            if (prod.quantite > 0) {
                 console.log('GET Retrieved ID: ' + prod._id);
                 res.json(prod);
-            }else
-            {
+            } else {
                 res.json(" ah mince..");
             }
 
@@ -67,11 +65,11 @@ const updateProd = (key, value) => {
     // Get our request and form values.
     //const id = req.params.id;
     //const { quantite } = req.body;
-    quantite=value;
-    // find the document by ID
-    return productModel.findByIdAndUpdate(key, { quantite });
 
+    // quantite = value;
+    // find the document by ID
+    productModel.findByIdAndUpdate(key, {quantite : value});
 };
 
 
-module.exports = {getProd,tout,storeProduct, indexProduit,updateProd};
+module.exports = {getProd, tout, storeProduct, updateProd};
