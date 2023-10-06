@@ -1,12 +1,13 @@
 import React from "react";
 import logo from "./../logo.svg";
 import "./../App.css";
+import {ipAPI} from "../config";
 
 function Home() {
     const [data, setData] = React.useState(null);
 
     React.useEffect(() => {
-        fetch("http://localhost:3001/api")
+        fetch(ipAPI + "api")
             .then((res) => res.json())
             .then((data) => setData(data.message));
     }, []);

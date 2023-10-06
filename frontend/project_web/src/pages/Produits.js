@@ -1,10 +1,11 @@
 import React from "react";
+import {ipAPI} from "../config";
 
 function Produits() {
     const [produits, setProduits] = React.useState(null);
 
     React.useEffect(() => {
-        fetch("http://localhost:3001/all")
+        fetch(ipAPI + "all")
             .then((res) => res.json())
             .then((data) => {
                 let panier = JSON.parse(localStorage.getItem("panier")) || [];
