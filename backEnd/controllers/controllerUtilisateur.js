@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const userModel = require("../models/schemaUtilisateur");
+const bcrypt = require('bcrypt');
 
 const sinscrire = (req, res) => {
     const {Admin, nom, prenom, email, addressNumero, addressRue, ville, codepostal, password} = req.body;
@@ -13,7 +14,7 @@ const sinscrire = (req, res) => {
         addressRue: addressRue,
         ville: ville,
         Codepostal: codepostal,
-        password: password
+        password: bcrypt.hashSync(password, 10)
     }).then(todo => {
         console.log('POST creating new user: ' + todo);
         res.format({
@@ -31,8 +32,8 @@ const connexion = (req, res, next) => {
     const {email, password} = req.body;
     userModel.findOne({email: email}).then((user) => {
             if (user === null) {
-                res.json("Erreur de connexion");
-            } else if (user.password !== password) {
+                res.json("Mauvais identifiants");
+            } else if (!bcrypt.compareSync(password, user.password)) {
                 res.json("Mauvais identifiants");
             } else {
                 res.json(user);
@@ -62,13 +63,13 @@ const isAdmin = (req, res, next) => {
         });
 }
 
-const getUtilisateur = (req, res, next) => {
+const getUtilisateurNom = (req, res, next) => {
     const {id} = req.body;
     userModel.findById(id).then((user) => {
         if (user === null) {
-            res.json("Erreur de connexion");
+            res.json("Utilisateur introuvable");
         } else {
-            res.json(user);
+            res.json(user.nom);
         }
     }).catch((error) => {
         return next(error);
@@ -76,4 +77,4 @@ const getUtilisateur = (req, res, next) => {
 }
 
 // we export a list of all our controllers
-module.exports = {sinscrire, connexion, isAdmin};
+module.exports = {sinscrire, connexion, isAdmin, getUtilisateurNom};

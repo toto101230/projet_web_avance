@@ -9,7 +9,6 @@ function Inscription() {
         setData(data);
     }
 
-
     function sincrire(event) {
         if (data.mdp !== data.mpdConf) {
             alert("Les mots de passe ne correspondent pas");
@@ -33,14 +32,12 @@ function Inscription() {
             body: JSON.stringify(user)
         }).then((res) => {
             if (res.status === 200) {
-                alert("Inscription réussie");
                 window.location.href = "/";
                 localStorage.setItem("user", JSON.stringify(user.nom));
             } else {
                 alert("Erreur lors de l'inscription");
             }
         });
-
         event.preventDefault();
     }
 

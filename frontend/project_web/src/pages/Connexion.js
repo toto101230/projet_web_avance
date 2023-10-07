@@ -2,11 +2,15 @@ import {ipAPI} from "../config";
 import React from "react";
 
 function Connexion() {
-    let [data, setData] = React.useState({});
+    const [data, setData] = React.useState({});
+    const [erreur, setErreur] = React.useState(null);
 
     const onChange = (event) => {
         data[event.target.name] = event.target.value;
         setData(data);
+        if(erreur !== null){
+            setErreur(null);
+        }
     }
 
     function connexion(event) {
@@ -25,10 +29,10 @@ function Connexion() {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data); //todo à revoir
-                if (data === "Erreur de connexion") {
-                    alert("Erreur de connexion");
+                if (data === "Mauvais identifiants") {
+                    setErreur("Mauvais identifiants");
                 } else {
-                    localStorage.setItem("user", JSON.stringify(data));
+                    localStorage.setItem("user", JSON.stringify(data)); //todo faire un system de token
                     window.location.href = "/";
                 }
             })
@@ -45,9 +49,10 @@ function Connexion() {
                     <input type="text" name="email" required
                            onChange={(event) => onChange(event)}/></label><br/>
                 <label>Mot de passe:
-                    <input type="text" name="password" required
+                    <input type="password" name="password" required
                            onChange={(event) => onChange(event)}/></label><br/>
-                <input type="submit" value="Submit"/>
+                <input type="submit" value="Submit"/><br/>
+                <span style={{color: "red"}}>{erreur}</span>
             </form>
             <br/>
             <a href="/inscription">Pas encore inscrit ?</a>

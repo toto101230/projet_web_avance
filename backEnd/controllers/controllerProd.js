@@ -30,7 +30,7 @@ const indexProduit = (req, res) => {
     res.json(value);
 }
 
-const tout = (_req, res, next) => {
+const getProduits = (_req, res, next) => {
     productModel.find({})
         .then((produits) => {
             //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
@@ -43,7 +43,7 @@ const tout = (_req, res, next) => {
     });
 };
 
-const getProd = (req, res, next) => {
+const getProduit = (req, res, next) => {
     productModel
         .findById(req.params.id)
         .then((prod) => {
@@ -61,15 +61,5 @@ const getProd = (req, res, next) => {
         });
 };
 
-const updateProd = (key, value) => {
-    // Get our request and form values.
-    //const id = req.params.id;
-    //const { quantite } = req.body;
 
-    // quantite = value;
-    // find the document by ID
-    productModel.findByIdAndUpdate(key, {quantite : value});
-};
-
-
-module.exports = {getProd, tout, storeProduct, updateProd};
+module.exports = {getProd: getProduit, tout: getProduits, storeProduct};
