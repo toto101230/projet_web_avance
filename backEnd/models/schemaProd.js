@@ -6,7 +6,7 @@ const prod = new mongoose.Schema({
     _id: ObjectId,
     title: { type: String, required: true },
     description: { type: String, required: true },
-    prix: { type: Number, required: true }, // Utilisez 'Number' au lieu de 'Integer'
+    prix: { type: Number, required: true },
     quantite:{type:Number,required:true}
 });
 

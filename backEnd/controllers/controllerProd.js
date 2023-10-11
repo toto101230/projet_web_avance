@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const productModel = require("../models/schemaProd");
 
-const storeProduct = (req, res) => {
+const storeProduct = (req, res, next) => {
     const {title, description, prix, quantite} = req.body;
     productModel.create({
         _id: new mongoose.Types.ObjectId(),
@@ -19,15 +19,8 @@ const storeProduct = (req, res) => {
         })
     }).catch(
         (error) => {
-            return res.send("There was a problem " + error);
+            return next(error);
         });
-}
-// we export a list of all our controllers
-
-const indexProduit = (req, res) => {
-    let value = [{title: "Produit 1", description: "Description produit 1", prix: 1.99, quantite: 1},
-        {title: "Produit 2", description: "Description produit 2", prix: 2.99, quantite: 1}]
-    res.json(value);
 }
 
 const getProduits = (_req, res, next) => {
@@ -51,7 +44,7 @@ const getProduit = (req, res, next) => {
                 console.log('GET Retrieved ID: ' + prod._id);
                 res.json(prod);
             } else {
-                res.json(" ah mince..");
+                res.json("Le produit n'est plus disponible");
             }
 
         })

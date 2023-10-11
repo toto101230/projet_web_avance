@@ -11,6 +11,7 @@ require('./models/db');
 app.use(cors())
 app.use(bodyParser.json());
 
+//fonction de test pour vérifier que le serveur fonctionne
 app.get("/api", (req, res) => {
     res.json({message: "Hello from server!"});
 });

@@ -10,7 +10,7 @@ const utilisateur = new mongoose.Schema({
     email: { type: String, required: true },
     addressNumero: { type: Number, required: false },
     addressRue: { type: String, required: false },
-    ville: { type: String, required: false }, // Utilisez 'Number' au lieu de 'Integer'
+    ville: { type: String, required: false },
     Codepostal:{type:Number,required:false},
     password: { type: String, required: true }
 });

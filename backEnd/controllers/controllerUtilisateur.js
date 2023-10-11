@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const userModel = require("../models/schemaUtilisateur");
 const bcrypt = require('bcrypt');
 
-const sinscrire = (req, res) => {
+const sinscrire = (req, res, next) => {
     const {Admin, nom, prenom, email, addressNumero, addressRue, ville, codepostal, password} = req.body;
     userModel.create({
         _id: new mongoose.Types.ObjectId(),
@@ -24,7 +24,7 @@ const sinscrire = (req, res) => {
         })
     }).catch(
         (error) => {
-            return res.send("There was a problem " + error);
+            return next(error);
         });
 }
 
@@ -41,9 +41,8 @@ const connexion = (req, res, next) => {
         }
     ).catch(
         (error) => {
-            return res.send("There was a problem " + error);
+            return next(error);
         });
-
 }
 
 const isAdmin = (req, res, next) => {
@@ -59,7 +58,7 @@ const isAdmin = (req, res, next) => {
         }
     ).catch(
         (error) => {
-            return res.send("There was a problem " + error);
+            return next(error);
         });
 }
 
