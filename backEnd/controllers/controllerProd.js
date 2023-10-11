@@ -10,11 +10,11 @@ const storeProduct = (req, res, next) => {
         prix: prix,
         quantite: quantite,
 
-    }).then(todo => {
-        console.log('POST creating new product: ' + todo);
+    }).then(data => {
+        console.log('POST creating new product: ' + data);
         res.format({
             json: function () {
-                res.json(todo);
+                res.json(data);
             }
         })
     }).catch(

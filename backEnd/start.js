@@ -41,7 +41,7 @@ if (app.get('env') === 'development') {
             error.status = 400;
         }
         res.status(error.status);
-        res.render('error', {
+        res.json({
             title: 'Error ' + error.status,
             message: error.message,
             stacktrace: error.stack
@@ -58,7 +58,7 @@ if (app.get('env') === 'development') {
             error.status = 400;
         }
         res.status(error.status);
-        res.render('error', {
+        res.json({
             title: 'Error ' + error.status,
             message: error.message,
             stacktrace: null

@@ -2,53 +2,40 @@ import React from "react";
 import {ipAPI} from "../config";
 
 function Admin() {
-	//todo verifier si admin
-
 	const [commandes, setCommandes] = React.useState(null);
 	const [produits, setProduits] = React.useState(null);
+	const [erreurs, setErreurs] = React.useState(null);
+	const [isAdmin, setIsAdmin] = React.useState(false);
 
 	React.useEffect(() => {
-		// récupération des commandes
-		fetch(ipAPI + "commandes")
-			.then((res) => res.json())
-			.then((data) => {
-				setCommandes(data)
-				//récupération des noms des utilisateurs
-				// data.forEach((commande) => { // todo a revoir
-				// 	fetch(ipAPI + "user/getUtilisateurNom", {
-				// 		method: 'POST',
-				// 		headers: {
-				// 			'Content-Type': 'application/json',
-				// 		},
-				// 		body: JSON.stringify({ id: commande.utilisateur }),
-				// 	})
-				// 		.then(response => response.json())
-				// 		.then(nom => {
-				// 			commande.utilisateur = nom;
-				// 			setCommandes(data);
-				// 		})
-				// 		.catch((error) => {
-				// 			console.error('Error:', error);
-				// 		});
-				// });
-			})
-			.catch((error) => setCommandes([{
-				user: "test", produits: [{ _id: "651d834652c3d15bceb5d191", quantite: 2 }, {
-					_id: "651d834752c3d15bceb5d19b", quantite: 14
-				}], valide: false
-			}, {
-				user: "test2", produits: [{ _id: "651d834652c3d15bceb5d191", quantite: 2 }, {
-					_id: "651d834752c3d15bceb5d19b", quantite: 14
-				}], valide: true
-			}]));
+		fetch(ipAPI + "user/admin", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ nom: localStorage.getItem("user") })
+		}).then((res) => {
+			if (res.status !== 200) {
+				window.location.href = "/";
+				setIsAdmin(false);
+			}else{
+				setIsAdmin(true);
+			}
+		}).then((res) => {
+			// récupération des commandes
+			fetch(ipAPI + "commandes")
+				.then((res) => res.json())
+				.then((data) => setCommandes(data))
+				.catch((error) => setCommandes([]));
 
-		// récupération des produits
-		fetch(ipAPI + "all")
-			.then((res) => res.json())
-			.then((data) => setProduits(data))
-			.catch((error) => setProduits([{ _id: 1, title: "test", prix: 2.99, quantite: 10 }, {
-				_id: 2, title: "test2", prix: 5, quantite: 8
-			}]));
+			// récupération des produits
+			fetch(ipAPI + "all")
+				.then((res) => res.json())
+				.then((data) => setProduits(data))
+				.catch((error) => setProduits([{ _id: 1, title: "test", prix: 2.99, quantite: 10 }, {
+					_id: 2, title: "test2", prix: 5, quantite: 8
+				}]));
+		});
 	}, []);
 
 	function commandeValidee(commande) {
@@ -63,7 +50,7 @@ function Admin() {
 				if (res.status === 200) {
 					window.location.reload();
 				} else {
-					alert("Erreur lors de la validation de la commande");
+					setErreurs("Erreur lors de la validation de la commande")
 				}
 			})
 		}
@@ -122,11 +109,15 @@ function Admin() {
 				if (res.status === 200) {
 					window.location.reload();
 				} else {
-					alert("Erreur lors de l'ajout du produit");
+					setErreurs("Erreur lors de l'ajout du produit")
 				}
 			})
 		});
 
+	}
+
+	if(!isAdmin){
+		return <div>Vous n'avez pas les droits</div>
 	}
 
 	return (
@@ -140,13 +131,16 @@ function Admin() {
 						Produits commandés :
 						<ul style={{ listStyleType: "square" }}>
 							{Object.entries(commande.listeProduits).map((p) => (
-								<li key={p[0]}>{findProduitName(p[0])} en {p[1]} exemplaires <br/></li>
+								<li key={p[0]}> {findProduitName(p[0])} en {p[1]} exemplaires<br/></li>
 							))}
 						</ul>
 						Action : {commandeValidee(commande)}
 					</li>
 				))}
 			</ol>
+			<div>
+				{erreurs !== null ? <p style={{ color: "red" }}>{erreurs}</p> : null}
+			</div>
 
 			<h2>Liste des produits</h2>
 			<ul>

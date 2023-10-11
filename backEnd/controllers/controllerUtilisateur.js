@@ -15,11 +15,11 @@ const sinscrire = (req, res, next) => {
         ville: ville,
         Codepostal: codepostal,
         password: bcrypt.hashSync(password, 10)
-    }).then(todo => {
-        console.log('POST creating new user: ' + todo);
+    }).then(data => {
+        console.log('POST creating new user: ' + data);
         res.format({
             json: function () {
-                res.json(todo);
+                res.json(data);
             }
         })
     }).catch(
@@ -46,18 +46,21 @@ const connexion = (req, res, next) => {
 }
 
 const isAdmin = (req, res, next) => {
-    const {name} = req.body;
-    userModel.findOne({name: name}).then((user) => {
+    const {nom} = req.body;
+    console.log(nom);
+    userModel.findOne({nom: nom}).then((user) => {
+        console.log(user);
             if (user === null) {
-                res.json("Erreur de connexion");
+                res.status(401).json("Erreur de connexion");
             } else if (user.Admin !== true) {
-                res.json("Vous n'avez pas les droits");
+                res.status(401).json("Vous n'avez pas les droits");
             } else {
-                res.json(user.nom);
+                res.status(200).json(user.nom);
             }
         }
     ).catch(
         (error) => {
+            console.log(error);
             return next(error);
         });
 }

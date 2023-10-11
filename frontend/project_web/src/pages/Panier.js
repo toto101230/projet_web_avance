@@ -1,6 +1,7 @@
 import React from "react";
 import {ipAPI} from "../config";
 import "../css/Panier.css"
+import Cookies from 'react-cookies'
 
 function Panier() {
 	const [produits, setProduits] = React.useState(null);
@@ -15,6 +16,7 @@ function Panier() {
 	function commander() {
 		let user = localStorage.getItem("user");
 		if (user === null) {
+			Cookies.save("panier", "panier", {path: "/", maxAge: 600});
 			window.location.href = "/connexion";
 		}
 
@@ -60,12 +62,11 @@ function Panier() {
 						setCommandeReussie(true)
 						setProduits([])
 					} else {
-						console.log(res);
-						alert("Erreur lors de la commande! Vérifiez que vous avez assez de stock");
+						setErreursCommande([{id: 0, msg: "Erreur lors de la commande ! Vérifiez que vous avez assez de stock"}])
 					}
 				}).catch((err) => {
 					console.log(err);
-					alert("Erreur lors de la commande");
+					setErreursCommande([{id: 0, msg: "Erreur lors de la commande ! Vérifiez que vous avez assez de stock"}])
 				});
 			});
 	}

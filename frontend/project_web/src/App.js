@@ -9,7 +9,6 @@ import Inscription from "./pages/Inscription";
 import Deconnexion from "./pages/Deconnexion";
 import Admin from "./pages/Admin";
 
-
 export default function App() {
     return (
         <BrowserRouter>

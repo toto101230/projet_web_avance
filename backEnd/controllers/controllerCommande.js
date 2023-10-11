@@ -10,7 +10,7 @@ const commander = (req, res, next) => {
         utilisateur: utilisateur,
         listeProduits: listeProduits,
         valide: false
-    }).then((todo) => {
+    }).then((data) => {
         console.log(listeProduits);
         listeProduits.forEach((produit) => {
             productModel.findById(produit[0]).then((objet) => {
@@ -20,14 +20,14 @@ const commander = (req, res, next) => {
                     return;
                 }
                 productModel.findByIdAndUpdate(produit[0], {quantite: diff}).then((obj) => {
-                    // console.log('on fait une reservation! ' + todo);
+                    // console.log('on fait une reservation! ' + data);
                 });
             }).catch((error) => {
                 console.log(error);
                 return res.send("Il y a eu un problème " + error);
             });
         });
-        res.json(todo);
+        res.json(data);
     }).catch((error) => {
         return next(error);
     });

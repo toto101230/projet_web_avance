@@ -1,17 +1,22 @@
 import React from 'react';
 import {ipAPI} from "../config";
+import Cookies from "react-cookies";
 
 function Inscription() {
     const [data, setData] = React.useState({});
+    const [erreur, setErreur] = React.useState(null);
 
     function onChange(event) {
         data[event.target.name] = event.target.value;
         setData(data);
+        setErreur(null)
     }
 
     function sincrire(event) {
+        event.preventDefault();
         if (data.mdp !== data.mpdConf) {
-            alert("Les mots de passe ne correspondent pas");
+            setErreur("Les mots de passe ne correspondent pas");
+            return;
         }
         const user = {
             Admin: false,
@@ -32,13 +37,17 @@ function Inscription() {
             body: JSON.stringify(user)
         }).then((res) => {
             if (res.status === 200) {
-                window.location.href = "/";
                 localStorage.setItem("user", JSON.stringify(user.nom));
+                if (Cookies.load("panier") !== undefined) {
+                    Cookies.remove("panier");
+                    window.location.href = "/panier";
+                } else {
+                    window.location.href = "/";
+                }
             } else {
-                alert("Erreur lors de l'inscription");
+                setErreur("Erreur lors de l'inscription ! Vérifiez les informations saisies ou réessayez plus tard");
             }
         });
-        event.preventDefault();
     }
 
     return (
@@ -65,6 +74,7 @@ function Inscription() {
                                                             onChange={(event) => onChange(event)}/></label><br/>
                 <input type="submit" value="Envoyer"/>
             </form>
+            {erreur !== null ? <p style={{color: "red"}}>{erreur}</p> : null}
 
             <p>Vous avez déjà un compte ? <a href="/connexion">Connectez-vous</a></p>
         </div>

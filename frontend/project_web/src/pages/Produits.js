@@ -6,17 +6,17 @@ function Produits() {
 	const [panier, setPanier] = React.useState(null);
 
 	React.useEffect(() => {
+		let panier = JSON.parse(localStorage.getItem("panier")) || [];
+		setPanier(panier);
 		fetch(ipAPI + "all")
 			.then((res) => res.json())
 			.then((data) => {
-				let panier = JSON.parse(localStorage.getItem("panier")) || [];
 				const newData = data.map((dataProduit) => {
 					let pInPanier = panier.filter((p) => p._id === dataProduit._id);
 					dataProduit.quantite = pInPanier.length > 0 ? dataProduit.quantite - pInPanier[0].quantite : dataProduit.quantite;
 					return dataProduit
 				});
 				setProduits(newData);
-				setPanier(panier)
 			})
 			.catch((error) => setProduits([{ _id: 1, title: "test", prix: 10, quantite: 10 }, {
 				_id: 2, title: "test2", prix: 20, quantite: 20
