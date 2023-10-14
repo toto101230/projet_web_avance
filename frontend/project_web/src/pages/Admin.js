@@ -13,7 +13,7 @@ function Admin() {
 			headers: {
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify({ nom: localStorage.getItem("user") })
+			body: JSON.stringify({ nom: JSON.parse(localStorage.getItem("user")) })
 		}).then((res) => {
 			if (res.status !== 200) {
 				window.location.href = "/";

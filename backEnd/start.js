@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 //fonction de test pour vérifier que le serveur fonctionne
 app.get("/api", (req, res) => {
-    res.json({message: "Hello from server!"});
+	res.json({ message: "Hello from server!" });
 });
 
 app.use(require('./routes/routesProd'));
@@ -22,51 +22,51 @@ app.use(require('./routes/routesUtilisateur'));
 
 // simple middleware to catch all non routed pages as 404 and forward to the error middleware
 app.use((req, _res, next) => {
-    const error = new Error('Not Found');
-    error.status = 404;
-    error.message = 'The page ' + req.hostname + req.originalUrl + ' could not be found on this website.';
-    next(error);
+	const error = new Error('Not Found');
+	error.status = 404;
+	error.message = 'The page ' + req.hostname + req.originalUrl + ' could not be found on this website.';
+	next(error);
 });
 
 /*** Error middlewares ***/
 
 if (app.get('env') === 'development') {
-    // Development error middleware
-    // will print the stacktrace while in development mode
-    app.use((error, _req, res, _next) => {
-        if (!error) {
-            error = new Error('Unknown error');
-            error.status = 500;
-        } else {
-            error.status = 400;
-        }
-        res.status(error.status);
-        res.json({
-            title: 'Error ' + error.status,
-            message: error.message,
-            stacktrace: error.stack
-        });
-    });
+	// Development error middleware
+	// will print the stacktrace while in development mode
+	app.use((error, _req, res, _next) => {
+		if (!error) {
+			error = new Error('Unknown error');
+			error.status = 500;
+		} else {
+			error.status = 400;
+		}
+		res.status(error.status);
+		res.json({
+			title: 'Error ' + error.status,
+			message: error.message,
+			stacktrace: error.stack
+		});
+	});
 } else {
-    // Production error middleware
-    // no stacktraces leaked to user
-    app.use((error, _req, res, _next) => {
-        if (!error) {
-            error = new Error('Unknown error');
-            error.status = 500;
-        } else {
-            error.status = 400;
-        }
-        res.status(error.status);
-        res.json({
-            title: 'Error ' + error.status,
-            message: error.message,
-            stacktrace: null
-        });
-    });
+	// Production error middleware
+	// no stacktraces leaked to user
+	app.use((error, _req, res, _next) => {
+		if (!error) {
+			error = new Error('Unknown error');
+			error.status = 500;
+		} else {
+			error.status = 400;
+		}
+		res.status(error.status);
+		res.json({
+			title: 'Error ' + error.status,
+			message: error.message,
+			stacktrace: null
+		});
+	});
 }
 
 app.listen(port, () => {
-    console.log('Serveur en cours d\'exécution sur le port ' + port);
+	console.log('Serveur en cours d\'exécution sur le port ' + port);
 });
 
