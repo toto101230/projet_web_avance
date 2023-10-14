@@ -9,28 +9,27 @@ function Home() {
 	React.useEffect(() => {
 		fetch(ipAPI + "api")
 			.then((res) => res.json())
-			.then((data) => setData(data.message));
+			.then((data) => setData(data.message))
+			.catch(() => setData("Si vous voyez ce message, c'est que l'API ne fonctionne pas !"));
 	}, []);
 
 	return (
 		<div className="App">
 			<header className="App-header">
 				<img src={logo} className="App-logo" alt="logo"/>
-				<p>{!data ? "Si vous voyez ce message, c'est que l'API ne fonctionne pas" : data}</p>
+				<p>{data}</p>
 			</header>
-			<h1>Bienvenue sur le site de vente de produits</h1>
-			Vous trouverez dans la page "{<a href="/produits">Produits</a>}" la liste des produits disponibles à la vente.
+			<h1>Bienvenue sur ce site de vente de produits</h1>
+			Vous trouverez dans la page "{<a href="/produits">Produits</a>}" la liste des produits disponibles à la vente. Vous pouvez cliquer sur un produit pour l'ajouter à votre panier.
 			<br/>
-			Vous pouvez ajouter des produits à votre panier, et valider votre commande dans la page "{<a href="/panier">Panier</a>}".
+			Vous pouvez voir, modifier et réserver votre panier dans la page "{<a href="/panier">Panier</a>}".
 			<br/>
-            Le bouton "Add produit" vous permet d'ajouter un produit à la liste des produits disponibles à la vente.
-            <br/>
-            La page "{<a href="/connexion">Connexion</a>}" vous permet de vous connecter à votre compte utilisateur.
-            <br/>
-            La page "{<a href="/inscription">Inscription</a>}" vous permet de créer un compte utilisateur.
-            <br/>
-            La page "{<a href="/admin">Admin</a>}" vous permet de voir la liste des commandes, et de valider les commandes.
-            <br/>
+			La page "{<a href="/inscription">Inscription</a>}" vous permet de créer un compte utilisateur.
+			<br/>
+			La page "{<a href="/connexion">Connexion</a>}" vous permet de vous connecter à votre compte avec votre adresse mail et votre mot de passe.
+			<br/>
+			La page "{<a href="/admin">Admin</a>}" vous permet de voir la liste des commandes, et de valider les commandes si vous êtes administrateur.
+			<br/>
 		</div>
 	);
 }

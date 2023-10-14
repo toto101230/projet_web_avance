@@ -21,20 +21,21 @@ function Admin() {
 			}else{
 				setIsAdmin(true);
 			}
-		}).then((res) => {
+		}).then(() => {
 			// récupération des commandes
 			fetch(ipAPI + "commandes")
 				.then((res) => res.json())
 				.then((data) => setCommandes(data))
-				.catch((error) => setCommandes([]));
+				.catch(() => setCommandes([]));
 
 			// récupération des produits
 			fetch(ipAPI + "all")
 				.then((res) => res.json())
 				.then((data) => setProduits(data))
-				.catch((error) => setProduits([{ _id: 1, title: "test", prix: 2.99, quantite: 10 }, {
-					_id: 2, title: "test2", prix: 5, quantite: 8
-				}]));
+				.catch(() => setProduits([]));
+		}).catch(() => {
+			window.location.href = "/";
+			setIsAdmin(false);
 		});
 	}, []);
 

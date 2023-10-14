@@ -4,6 +4,7 @@ import {ipAPI} from "../config";
 function Produits() {
 	const [produits, setProduits] = React.useState(null);
 	const [panier, setPanier] = React.useState(null);
+	const [erreur, setErreur] = React.useState(null);
 
 	React.useEffect(() => {
 		let panier = JSON.parse(localStorage.getItem("panier")) || [];
@@ -18,10 +19,8 @@ function Produits() {
 				});
 				setProduits(newData);
 			})
-			.catch((error) => setProduits([{ _id: 1, title: "test", prix: 10, quantite: 10 }, {
-				_id: 2, title: "test2", prix: 20, quantite: 20
-			}]));
-	}, []);
+			.catch(() => {setErreur("Impossible de charger les produits");setProduits([])});
+	},	[]);
 
 	function setProduitSelectionne(produitSelectionne) {
 		let produit = panier.filter((p) => p._id === produitSelectionne._id);
@@ -83,6 +82,7 @@ function Produits() {
 	return (
 		<div>
 			<h1>Listes des produits</h1>
+			{erreur? <span style={{color: "red"}}>{erreur}</span> : null}
 			<ul>
 				{!produits ? "Loading..." : produits.map((produit) => (
 					<li key={produit._id}>
@@ -97,7 +97,7 @@ function Produits() {
 				))}
 			</ul>
 			<br/>
-			{panier && panier.length === 0 ? "Votre panier est vide" : voirPanier()}
+			{erreur ? "" : panier && panier.length === 0 ? "Votre panier est vide" : voirPanier()}
 		</div>
 	);
 }

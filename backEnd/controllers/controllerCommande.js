@@ -19,8 +19,7 @@ const commander = (req, res, next) => {
 					res.status(400).json({ message: "Erreur de commande" });
 					return;
 				}
-				productModel.findByIdAndUpdate(produit[0], { quantite: diff }).then((obj) => {
-				});
+				productModel.findByIdAndUpdate(produit[0], { quantite: diff }).then(() => {});
 			}).catch((error) => {
 				console.log(error);
 				return res.send("Il y a eu un problème " + error);

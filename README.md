@@ -2,7 +2,7 @@
 
 ## Description du projet
 Le projet est composé d'un frontend faissant appel à une api
-On retouve différents pages :
+On retrouve différents pages :
 - Une page d'accueil avec le résumé des autres pages
 - Une page de produits pour voir les produits et les ajouter au panier
 - Une page de panier pour voir les produits ajoutés au panier et reserver le panier
@@ -62,5 +62,5 @@ password : toto
 
 ## Auteurs
 Projet réalisé par :
-- [Thomas PIENNE](https://github.com/toto101230)
-- [Danier XXXX](https://github.com/dans300)
+- [Thomas Pienne](https://github.com/toto101230)
+- [Daniel Sierra Mejia](https://github.com/dans300)
