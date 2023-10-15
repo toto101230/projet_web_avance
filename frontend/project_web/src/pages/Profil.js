@@ -6,11 +6,16 @@ function Profil() {
 	const [erreur, setErreur] = React.useState(null);
 
 	React.useEffect(() => {
-		fetchPost("user/getUtilisateur", { nom: JSON.parse(localStorage.getItem("user")) })
-			.then((res) => res.json())
-			.then((data) => {
-				setUser(data);
-			})
+		fetchPost("user/getUtilisateur", { token: JSON.parse(localStorage.getItem("user")).token })
+			.then((res) => {
+				console.log(res);
+				if (res.status !== 200) {
+					window.location.href = "/";
+				}
+				res.json().then((data) => {
+					setUser(data);
+				}).catch(() => setErreur("Impossible de charger les informations de l'utilisateur"));
+			}).catch(() => setErreur("Impossible de charger les informations de l'utilisateur"));
 	}, []);
 
 	function onChange(event) {
@@ -22,13 +27,19 @@ function Profil() {
 	function majAddress(event) {
 		event.preventDefault();
 		fetchPost("user/majAddress", {
-			nom: user.nom,
+			token: JSON.parse(localStorage.getItem("user")).token,
 			addressNumero: user.addressNumero,
 			addressRue: user.addressRue,
 			ville: user.ville,
 			Codepostal: user.Codepostal
-		}).then((res) => res.json()).then((data) => {
-			if (data === "Utilisateur introuvable") {
+		}).then((res) => {
+			if (res.status !== 200) {
+				setErreur("Utilisateur introuvable");
+				return null;
+			}
+			return res.json();
+		}).then((data) => {
+			if (data === null) {
 				setErreur("Utilisateur introuvable");
 			} else {
 				setErreur(null);

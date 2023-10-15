@@ -9,11 +9,11 @@ function Admin() {
 	const [isAdmin, setIsAdmin] = React.useState(false);
 
 	React.useEffect(() => {
-		fetchPost("user/admin", { nom: JSON.parse(localStorage.getItem("user")) }).then((res) => {
+		fetchPost("user/admin", { token: JSON.parse(localStorage.getItem("user")).token }).then((res) => {
 			if (res.status !== 200) {
 				setIsAdmin(false);
 				window.location.href = "/";
-			}else{
+			} else {
 				setIsAdmin(true);
 			}
 		}).then(() => {
@@ -97,7 +97,7 @@ function Admin() {
 
 	}
 
-	if(!isAdmin){
+	if (!isAdmin) {
 		return <div>Vous n'avez pas les droits</div>
 	}
 

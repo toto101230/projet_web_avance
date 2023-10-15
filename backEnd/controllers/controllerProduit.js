@@ -18,25 +18,21 @@ const storeProduct = (req, res, next) => {
 
 const getProduits = (_req, res, next) => {
 	productModel.find({}).then((produits) => {
-		//respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
 		res.json(produits);
 	}).catch((error) => {
-		// transmit the error to the next middleware
 		return next(error);
 	});
 };
 
 const getProduit = (req, res, next) => {
-	productModel.findById(req.params.id).then((prod) => {
+	const { id } = req.params;
+	productModel.findById(id).then((prod) => {
 		if (prod.quantite > 0) {
-			console.log('GET Retrieved ID: ' + prod._id);
 			res.json(prod);
 		} else {
 			res.json("Le produit n'est plus disponible");
 		}
-
 	}).catch((error) => {
-		// transmit the error to the next middleware
 		return next(error);
 	});
 };

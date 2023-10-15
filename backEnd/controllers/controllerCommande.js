@@ -5,6 +5,7 @@ const productModel = require("../models/schemaProd");
 const commander = (req, res, next) => {
 	const { utilisateur, listeProduits } = req.body;
 
+	//on vérifie que les produits sont disponibles
 	productModel.find({ _id: { $in: listeProduits.map((produit) => produit[0]) } }).then((produits) => {
 		if (produits.length === 0) {
 			return null;
@@ -22,6 +23,7 @@ const commander = (req, res, next) => {
 		}
 		return produits;
 	}).then((produits) => {
+		// on met à jour la quantité des produits
 		if (produits === null) {
 			return null;
 		}
@@ -35,6 +37,7 @@ const commander = (req, res, next) => {
 		}
 		return produits;
 	}).then((produits) => {
+		// on crée la commande
 		if (produits === null) {
 			res.status(400).json({ message: "Erreur de commande" });
 			return;

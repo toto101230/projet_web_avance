@@ -31,13 +31,17 @@ function Inscription() {
         }
         fetchPost("user/add", user).then((res) => {
             if (res.status === 200) {
-                localStorage.setItem("user", JSON.stringify(user.nom));
-                if (Cookies.load("panier") !== undefined) {
-                    Cookies.remove("panier");
-                    window.location.href = "/panier";
-                } else {
-                    window.location.href = "/";
-                }
+                res.json().then((data) => {
+                    localStorage.setItem("user", JSON.stringify(data)); //todo faire un system de token
+                    if (Cookies.load("panier") !== undefined) {
+                        Cookies.remove("panier");
+                        window.location.href = "/panier";
+                    } else {
+                        window.location.href = "/";
+                    }
+                }).catch(() => {
+                    setErreur("Erreur lors de l'inscription ! Vérifiez les informations saisies ou réessayez plus tard");
+                });
             } else {
                 setErreur("Erreur lors de l'inscription ! Vérifiez les informations saisies ou réessayez plus tard");
             }

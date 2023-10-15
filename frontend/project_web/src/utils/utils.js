@@ -11,3 +11,12 @@ export async function fetchPost(ip, data) {
 
 	return response;
 }
+
+export function createStorageUser(user) {
+	const item = {
+		nom: user.nom,
+		token: user.token,
+		expires: Date.now() + 86400000 // 24h
+	}
+	localStorage.setItem("user", JSON.stringify(item));
+}

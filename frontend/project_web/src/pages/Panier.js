@@ -15,7 +15,7 @@ function Panier() {
 	}, []);
 
 	function commander() {
-		let user = localStorage.getItem("user");
+		let user = JSON.parse(localStorage.getItem("user"));
 		if (user === null) {
 			Cookies.save("panier", "panier", { path: "/", maxAge: 600 });
 			window.location.href = "/connexion";
@@ -48,7 +48,7 @@ function Panier() {
 					return;
 				}
 				const commande = {
-					utilisateur: JSON.parse(user),
+					utilisateur: user.nom,
 					listeProduits: listeProduits
 				}
 				fetchPost("commander", commande).then((res) => {
@@ -57,11 +57,16 @@ function Panier() {
 						setCommandeReussie(true)
 						setProduits([])
 					} else {
-						setErreursCommande([{id: 0, msg: "Erreur lors de la commande ! Vérifiez que vous avez assez de stock"}])
+						setErreursCommande([{
+							id: 0,
+							msg: "Erreur lors de la commande ! Vérifiez que vous avez assez de stock"
+						}])
 					}
-				}).catch((err) => {
-					console.log(err);
-					setErreursCommande([{id: 0, msg: "Erreur lors de la commande ! Vérifiez que vous avez assez de stock"}])
+				}).catch(() => {
+					setErreursCommande([{
+						id: 0,
+						msg: "Erreur lors de la commande ! Vérifiez que vous avez assez de stock"
+					}])
 				});
 			});
 	}

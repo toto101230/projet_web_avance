@@ -1,6 +1,6 @@
 import React from "react";
 import Cookies from "react-cookies";
-import {fetchPost} from "../utils/utils";
+import {createStorageUser, fetchPost} from "../utils/utils";
 
 function Connexion() {
 	const [data, setData] = React.useState({});
@@ -20,18 +20,19 @@ function Connexion() {
 			email: data.email,
 			password: data.password
 		}
-		fetchPost("user/connexion", user).then(response => response.json()).then(data => {
-			console.log('Success:', data); //todo à revoir
-			if (data === "Mauvais identifiants") {
+		fetchPost("user/connexion", user).then(res => {
+			if (res.status !== 200) {
 				setErreur("Mauvais identifiants");
 			} else {
-				localStorage.setItem("user", JSON.stringify(data.nom)); //todo faire un system de token
-				if (Cookies.load("panier") !== undefined) {
-					Cookies.remove("panier");
-					window.location.href = "/panier";
-				} else {
-					window.location.href = "/";
-				}
+				res.json().then((data) => {
+					createStorageUser(data);
+					if (Cookies.load("panier") !== undefined) {
+						Cookies.remove("panier");
+						window.location.href = "/panier";
+					} else {
+						window.location.href = "/";
+					}
+				});
 			}
 		}).catch((error) => {
 			console.error('Error:', error);

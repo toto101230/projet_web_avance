@@ -3,6 +3,16 @@ import {Outlet} from "react-router-dom";
 
 function Layout() {
 
+	React.useEffect(() => {
+		const user = JSON.parse(localStorage.getItem("user"));
+		if(user === null) {
+			return;
+		}
+		if(Date.now() > user.expires || user.nom === null) {
+			localStorage.removeItem("user");
+		}
+	}, []);
+
 	function connexion() {
 		return (
 			<span>
@@ -16,7 +26,7 @@ function Layout() {
 	function deconnexion() {
 		return (
 			<span>
-				Connecté en tant que {JSON.parse(localStorage.getItem("user"))}
+				Connecté en tant que {JSON.parse(localStorage.getItem("user")).nom}
 				<span> | </span>
 				<a href={"/profil"}>Profil</a>
                 <span> | </span>
