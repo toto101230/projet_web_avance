@@ -8,6 +8,7 @@ import Connexion from "./pages/Connexion";
 import Inscription from "./pages/Inscription";
 import Deconnexion from "./pages/Deconnexion";
 import Admin from "./pages/Admin";
+import Profil from "./pages/Profil";
 
 export default function App() {
     return (
@@ -21,6 +22,7 @@ export default function App() {
                     <Route path="inscription" element={<Inscription/>}/>
                     <Route path="deconnexion" element={<Deconnexion/>}/>
                     <Route path="admin" element={<Admin/>}/>
+                    <Route path="profil" element={<Profil/>}/>
                     <Route path="*" element={<NoPage/>}/>
                 </Route>
             </Routes>

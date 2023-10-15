@@ -52,13 +52,31 @@ const isAdmin = (req, res, next) => {
 	});
 }
 
-const getUtilisateurNom = (req, res, next) => {
-	const { id } = req.body;
-	userModel.findById(id).then((user) => {
+const getUtilisateur = (req, res, next) => {
+	const { nom } = req.body;
+	userModel.findOne({ nom: nom }).then((user) => {
 		if (user === null) {
 			res.json("Utilisateur introuvable");
 		} else {
-			res.json(user.nom);
+			res.json(user);
+		}
+	}).catch((error) => {
+		return next(error);
+	});
+}
+
+const majAddress = (req, res, next) => {
+	const { nom, addressNumero, addressRue, ville, Codepostal } = req.body;
+	userModel.findOneAndUpdate({ nom: nom }, {
+		addressNumero: addressNumero,
+		addressRue: addressRue,
+		ville: ville,
+		Codepostal: Codepostal
+	}).then((user) => {
+		if (user === null) {
+			res.json("Utilisateur introuvable");
+		} else {
+			res.json(user);
 		}
 	}).catch((error) => {
 		return next(error);
@@ -66,4 +84,4 @@ const getUtilisateurNom = (req, res, next) => {
 }
 
 // we export a list of all our controllers
-module.exports = { sinscrire, connexion, isAdmin, getUtilisateurNom };
+module.exports = { sinscrire, connexion, isAdmin, getUtilisateur, majAddress };

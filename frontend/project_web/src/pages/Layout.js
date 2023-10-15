@@ -17,6 +17,8 @@ function Layout() {
 		return (
 			<span>
 				Connecté en tant que {JSON.parse(localStorage.getItem("user"))}
+				<span> | </span>
+				<a href={"/profil"}>Profil</a>
                 <span> | </span>
                 <a href={"/admin"}>Admin</a>
                 <span> | </span>
