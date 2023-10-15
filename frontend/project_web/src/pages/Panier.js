@@ -47,7 +47,7 @@ function Panier() {
 					return;
 				}
 				const commande = {
-					utilisateur: user,
+					utilisateur: JSON.parse(user),
 					listeProduits: listeProduits
 				}
 				fetch(ipAPI + "commander", {

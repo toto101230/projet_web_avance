@@ -18,16 +18,15 @@ const utilisateur = new mongoose.Schema({
 
 const userModel = mongoose.model('utilisateur', utilisateur);
 
-async function addUser() {
+async function ajoutUtilisateurs() {
 	await userModel.create({ _id: new mongoose.Types.ObjectId(), Admin: true, nom: "Admin", prenom: "Admin", email: "admin@gmail.com", addressNumero: 1, addressRue: "rue de l'admin", ville: "Adminville", Codepostal: 12345, password: bcrypt.hashSync("admin", 10) });
 	await userModel.create({ _id: new mongoose.Types.ObjectId(), Admin: false, nom: "toto", prenom: "toto", email: "toto@gmail.com", addressNumero: 1, addressRue: "rue de toto", ville: "totoville", Codepostal: 54321, password: bcrypt.hashSync("toto", 10) });
 }
 
 userModel.find({}).then((data) => {
-		if (data.length === 0) {
-			addUser();
-		}
+	if (data.length === 0) {
+		ajoutUtilisateurs();
 	}
-);
+});
 
 module.exports = userModel;

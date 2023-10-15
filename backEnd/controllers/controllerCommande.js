@@ -5,27 +5,50 @@ const productModel = require("../models/schemaProd");
 const commander = (req, res, next) => {
 	const { utilisateur, listeProduits } = req.body;
 
-	commandeModel.create({
-		_id: new mongoose.Types.ObjectId(),
-		utilisateur: utilisateur,
-		listeProduits: listeProduits,
-		valide: false
-	}).then((data) => {
-		console.log(listeProduits);
-		listeProduits.forEach((produit) => {
-			productModel.findById(produit[0]).then((objet) => {
-				const diff = objet.quantite - produit[1];
-				if (diff < 0) {
-					res.status(400).json({ message: "Erreur de commande" });
-					return;
+	productModel.find({ _id: { $in: listeProduits.map((produit) => produit[0]) } }).then((produits) => {
+		if (produits.length === 0) {
+			return null;
+		}
+		for (let i = 0; i < produits.length; i++) {
+			let diff = -1;
+			listeProduits.forEach((produitCommande) => {
+				if (produitCommande[0] === produits[i]._id.toString()) {
+					diff = produits[i].quantite - produitCommande[1];
 				}
-				productModel.findByIdAndUpdate(produit[0], { quantite: diff }).then(() => {});
-			}).catch((error) => {
-				console.log(error);
-				return res.send("Il y a eu un problème " + error);
 			});
+			if (diff < 0) {
+				return null;
+			}
+		}
+		return produits;
+	}).then((produits) => {
+		if (produits === null) {
+			return null;
+		}
+		for (let i = 0; i < produits.length; i++) {
+			listeProduits.forEach((produitCommande) => {
+				if (produitCommande[0] === produits[i]._id.toString()) {
+					const diff = produits[i].quantite - produitCommande[1];
+					productModel.findByIdAndUpdate(produits[i]._id.toString(), { quantite: diff }).then(() => {});
+				}
+			})
+		}
+		return produits;
+	}).then((produits) => {
+		if (produits === null) {
+			res.status(400).json({ message: "Erreur de commande" });
+			return;
+		}
+		commandeModel.create({
+			_id: new mongoose.Types.ObjectId(),
+			utilisateur: utilisateur,
+			listeProduits: listeProduits,
+			valide: false
+		}).then((data) => {
+			res.json(data);
+		}).catch((error) => {
+			return next(error);
 		});
-		res.json(data);
 	}).catch((error) => {
 		return next(error);
 	});
