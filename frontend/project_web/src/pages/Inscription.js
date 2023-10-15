@@ -1,6 +1,6 @@
 import React from 'react';
-import {ipAPI} from "../config";
 import Cookies from "react-cookies";
+import {fetchPost} from "../utils/utils";
 
 function Inscription() {
     const [data, setData] = React.useState({});
@@ -29,13 +29,7 @@ function Inscription() {
             Codepostal: data.codePostal,
             password: data.mdp
         }
-        fetch(ipAPI + "user/add", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(user)
-        }).then((res) => {
+        fetchPost("user/add", user).then((res) => {
             if (res.status === 200) {
                 localStorage.setItem("user", JSON.stringify(user.nom));
                 if (Cookies.load("panier") !== undefined) {

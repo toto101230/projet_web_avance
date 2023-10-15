@@ -1,6 +1,6 @@
-import {ipAPI} from "../config";
 import React from "react";
 import Cookies from "react-cookies";
+import {fetchPost} from "../utils/utils";
 
 function Connexion() {
 	const [data, setData] = React.useState({});
@@ -20,31 +20,22 @@ function Connexion() {
 			email: data.email,
 			password: data.password
 		}
-		fetch(ipAPI + "user/connexion", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(user),
-		})
-			.then(response => response.json())
-			.then(data => {
-				console.log('Success:', data); //todo à revoir
-				if (data === "Mauvais identifiants") {
-					setErreur("Mauvais identifiants");
+		fetchPost("user/connexion", user).then(response => response.json()).then(data => {
+			console.log('Success:', data); //todo à revoir
+			if (data === "Mauvais identifiants") {
+				setErreur("Mauvais identifiants");
+			} else {
+				localStorage.setItem("user", JSON.stringify(data.nom)); //todo faire un system de token
+				if (Cookies.load("panier") !== undefined) {
+					Cookies.remove("panier");
+					window.location.href = "/panier";
 				} else {
-					localStorage.setItem("user", JSON.stringify(data.nom)); //todo faire un system de token
-					if (Cookies.load("panier") !== undefined) {
-                        Cookies.remove("panier");
-						window.location.href = "/panier";
-					} else {
-						window.location.href = "/";
-					}
+					window.location.href = "/";
 				}
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
+			}
+		}).catch((error) => {
+			console.error('Error:', error);
+		});
 	}
 
 	return (

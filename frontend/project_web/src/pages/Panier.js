@@ -2,6 +2,7 @@ import React from "react";
 import {ipAPI} from "../config";
 import "../css/Panier.css"
 import Cookies from 'react-cookies'
+import {fetchPost} from "../utils/utils";
 
 function Panier() {
 	const [produits, setProduits] = React.useState(null);
@@ -16,20 +17,20 @@ function Panier() {
 	function commander() {
 		let user = localStorage.getItem("user");
 		if (user === null) {
-			Cookies.save("panier", "panier", {path: "/", maxAge: 600});
+			Cookies.save("panier", "panier", { path: "/", maxAge: 600 });
 			window.location.href = "/connexion";
 		}
 
-        if(produits === null || produits.length === 0){
-            setErreursCommande([{id: 0, msg: "Impossible de commander, le panier est vide !"}])
-            return;
-        }
+		if (produits === null || produits.length === 0) {
+			setErreursCommande([{ id: 0, msg: "Impossible de commander, le panier est vide !" }])
+			return;
+		}
 
 		let commandePossible = true;
 		fetch(ipAPI + "all")
 			.then((res) => res.json())
 			.then((data) => {
-                let erreurs = [];
+				let erreurs = [];
 				let listeProduits = produits.map((produit) => {
 					let quantiteRestant = data.find((p) => p._id === produit._id).quantite;
 					if (quantiteRestant < produit.quantite) {
@@ -42,7 +43,7 @@ function Panier() {
 					}
 					return [produit._id, produit.quantite];
 				});
-                setErreursCommande(erreurs)
+				setErreursCommande(erreurs)
 				if (!commandePossible) {
 					return;
 				}
@@ -50,13 +51,7 @@ function Panier() {
 					utilisateur: JSON.parse(user),
 					listeProduits: listeProduits
 				}
-				fetch(ipAPI + "commander", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify(commande)
-				}).then((res) => {
+				fetchPost("commander", commande).then((res) => {
 					if (res.status === 200) {
 						localStorage.removeItem("panier");
 						setCommandeReussie(true)
@@ -73,10 +68,10 @@ function Panier() {
 
 	return (
 		<div>
-            <p>
-			{(localStorage.getItem("user") === null) ? <span style={{ color: "red" }}>Attention,
+			<p>
+				{(localStorage.getItem("user") === null) ? <span style={{ color: "red" }}>Attention,
                 vous devez être connecté pour commander !</span> : ""}
-            </p>
+			</p>
 
 			<h1>Liste des éléments dans le panier</h1>
 			<table style={{ border: "1px solid black" }}>
@@ -130,12 +125,16 @@ function Panier() {
 				Math.round((acc + produit.quantite * produit.prix) * 100) / 100, 0)}€
 			</h2>
 
-			<button onClick={() => {localStorage.removeItem("panier");setProduits([])}}>Vider le panier</button>
+			<button onClick={() => {
+				localStorage.removeItem("panier");
+				setProduits([])
+			}}>
+				Vider le panier
+			</button>
 
 			<button onClick={() => commander()}>Commander</button>
-            <br/>
-            {commandeReussie ? <span style={{ color: "green" }}>Commande réussie</span> : ""}
-
+			<br/>
+			{commandeReussie ? <span style={{ color: "green" }}>Commande réussie</span> : ""}
 		</div>
 	);
 }

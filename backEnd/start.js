@@ -13,10 +13,10 @@ app.use(bodyParser.json());
 
 //fonction de test pour vérifier que le serveur fonctionne
 app.get("/api", (req, res) => {
-	res.json({ message: "Hello from server!" });
+	res.json({ message: "Salut de l'API" });
 });
 
-app.use(require('./routes/routesProd'));
+app.use(require('./routes/routesProduit'));
 app.use(require('./routes/routesCommande'));
 app.use(require('./routes/routesUtilisateur'));
 

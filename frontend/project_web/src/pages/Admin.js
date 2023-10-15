@@ -1,5 +1,6 @@
 import React from "react";
 import {ipAPI} from "../config";
+import {fetchPost} from "../utils/utils";
 
 function Admin() {
 	const [commandes, setCommandes] = React.useState(null);
@@ -8,16 +9,10 @@ function Admin() {
 	const [isAdmin, setIsAdmin] = React.useState(false);
 
 	React.useEffect(() => {
-		fetch(ipAPI + "user/admin", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({ nom: JSON.parse(localStorage.getItem("user")) })
-		}).then((res) => {
+		fetchPost("user/admin", { nom: JSON.parse(localStorage.getItem("user")) }).then((res) => {
 			if (res.status !== 200) {
-				window.location.href = "/";
 				setIsAdmin(false);
+				window.location.href = "/";
 			}else{
 				setIsAdmin(true);
 			}
@@ -41,13 +36,7 @@ function Admin() {
 
 	function commandeValidee(commande) {
 		function validerCommande(id) {
-			fetch(ipAPI + "commande/valider", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({ id: id })
-			}).then((res) => {
+			fetchPost("commande/valider", { id: id }).then((res) => {
 				if (res.status === 200) {
 					window.location.reload();
 				} else {
@@ -88,25 +77,16 @@ function Admin() {
 		let length = 0;
 		fetch(ipAPI + "all")
 			.then((res) => res.json())
-			.then((data) => {
-				length = data.length;
-			}).then(() => {
+			.then((data) => length = data.length).then(() => {
 
 			const produit = {
-				title: "Produit test " + (length + 1),
-				description: "Description produit test " + (length + 1),
-				//prix random
+				title: "Produit " + (length + 1),
+				description: "Description produit " + (length + 1),
 				prix: Math.floor(Math.random() * 1000) / 100,
 				quantite: Math.floor(Math.random() * 10)
 			}
 
-			fetch(ipAPI + "add", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(produit)
-			}).then((res) => {
+			fetchPost("add", produit).then((res) => {
 				if (res.status === 200) {
 					window.location.reload();
 				} else {

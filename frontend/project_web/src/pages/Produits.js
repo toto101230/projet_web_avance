@@ -13,14 +13,17 @@ function Produits() {
 			.then((res) => res.json())
 			.then((data) => {
 				const newData = data.map((dataProduit) => {
-					let pInPanier = panier.filter((p) => p._id === dataProduit._id);
-					dataProduit.quantite = pInPanier.length > 0 ? dataProduit.quantite - pInPanier[0].quantite : dataProduit.quantite;
+					let produitDansPanier = panier.filter((produit) => produit._id === dataProduit._id);
+					dataProduit.quantite = produitDansPanier.length > 0 ? dataProduit.quantite - produitDansPanier[0].quantite : dataProduit.quantite;
 					return dataProduit
 				});
 				setProduits(newData);
 			})
-			.catch(() => {setErreur("Impossible de charger les produits");setProduits([])});
-	},	[]);
+			.catch(() => {
+				setErreur("Impossible de charger les produits");
+				setProduits([])
+			});
+	}, []);
 
 	function setProduitSelectionne(produitSelectionne) {
 		let produit = panier.filter((p) => p._id === produitSelectionne._id);
@@ -34,21 +37,21 @@ function Produits() {
 			});
 			setPanier(panier)
 		} else {
-			setPanier(panier.map((p) => {
-				p.quantite = p._id === produitSelectionne._id ? p.quantite + 1 : p.quantite;
-				return p;
+			setPanier(panier.map((produit) => {
+				produit.quantite = produit._id === produitSelectionne._id ? produit.quantite + 1 : produit.quantite;
+				return produit;
 			}));
 		}
-		setProduits(produits.map((p) => {
-			if (p._id === produitSelectionne._id) {
-				p.quantite = p.quantite - 1;
+		setProduits(produits.map((produit) => {
+			if (produit._id === produitSelectionne._id) {
+				produit.quantite = produit.quantite - 1;
 			}
-			return p;
+			return produit;
 		}));
 		localStorage.setItem("panier", JSON.stringify(panier));
 	}
 
-    // affichage du panier s'il n'est pas vide
+	// affichage du panier s'il n'est pas vide
 	function voirPanier() {
 		return (
 			<div>
@@ -82,13 +85,14 @@ function Produits() {
 	return (
 		<div>
 			<h1>Listes des produits</h1>
-			{erreur? <span style={{color: "red"}}>{erreur}</span> : null}
+			{erreur ? <span style={{ color: "red" }}>{erreur}</span> : null}
 			<ul>
 				{!produits ? "Loading..." : produits.map((produit) => (
 					<li key={produit._id}>
-						{produit.title} - prix : {produit.prix}€
-						quantité : {produit.quantite}
-						{produit.quantite <= 0 ? " - Rupture de stock" :
+						{produit.title} - Prix : {produit.prix}€
+						- Quantité : {produit.quantite} -
+						description : {produit.description} -
+						{produit.quantite <= 0 ? " Rupture de stock" :
 							<button onClick={() => {
 								setProduitSelectionne(produit);
 							}}>Ajouter au panier</button>
@@ -97,7 +101,7 @@ function Produits() {
 				))}
 			</ul>
 			<br/>
-			{erreur ? "" : panier && panier.length === 0 ? "Votre panier est vide" : voirPanier()}
+			{erreur || !produits ? "" : panier && panier.length === 0 ? "Votre panier est vide" : voirPanier()}
 		</div>
 	);
 }
